@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspirational Quote Generator</title>
+    <style>
+        /* Modern Reset & Dark Elegant Background */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Ambient Glowing Background Blobs */
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #6366f1, #a855f7);
+            mix-blend-mode: screen;
+            filter: blur(80px);
+            opacity: 0.4;
+            z-index: 0;
+        }
+
+        body::before { top: 15%; left: 20%; animation: float 6s ease-in-out infinite alternate; }
+        body::after { bottom: 15%; right: 20%; animation: float 6s ease-in-out infinite alternate-reverse; }
+
+        @keyframes float {
+            0% { transform: translateY(0px) scale(1); }
+            100% { transform: translateY(20px) scale(1.1); }
+        }
+
+        /* Glassmorphism Card UI */
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 3rem 2rem;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Quote Box Styling */
+        .quote-box {
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #f8fafc;
+            line-height: 1.4;
+            margin-bottom: 2rem;
+            letter-spacing: -0.5px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Quote Placeholder state */
+        .quote-box.empty {
+            color: rgba(248, 250, 252, 0.4);
+            font-size: 1.2rem;
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        /* Smooth fade-in effect for new quotes */
+        .fade-in {
+            animation: fadeInEffect 0.5s forwards;
+        }
+
+        @keyframes fadeInEffect {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dynamic Neon Button */
+        button {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            transition: all 0.2s ease;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <div class="quote-box empty">Your daily dose of drive awaits...</div>
+        <button id="quote-btn">Inspire Me</button>
+    </div>
+
+    <script>
+        const quoteBox = document.querySelector(".quote-box");
+        const btn = document.getElementById("quote-btn");
+
+        // Fixed spelling of "quotes"
+        const quotes = [
+            "Never Give Up",
+            "Stay Focused",
+            "Keep Grinding",
+            "Keep Growing",
+            "Don't Forget Who You Are",
+            "Stay Disciplined"
+        ];
+
+        // Track the last index to prevent getting the same quote twice in a row
+        let lastIndex = -1;
+
+        btn.addEventListener("click", function() {
+            // Remove the placeholder styling class if present
+            quoteBox.classList.remove("empty");
+            
+            // Remove animation class to reset it
+            quoteBox.classList.remove("fade-in");
+            
+            // Trigger a quick reflow to restart the CSS animation properly
+            void quoteBox.offsetWidth;
+
+            let randomIndex;
+            
+            // Loop ensures you don't get the same quote back-to-back
+            do {
+                randomIndex = Math.floor(Math.random() * quotes.length);
+            } while (randomIndex === lastIndex && quotes.length > 1);
+            
+            lastIndex = randomIndex;
+
+            // Apply new quote text and trigger fade-in animation
+            quoteBox.textContent = `"${quotes[randomIndex]}"`;
+            quoteBox.classList.add("fade-in");
+        });
+    </script>
+</body>
+
+</html>
